@@ -2,6 +2,6 @@ defmodule SzybkiKalendarzApiWeb.PageController do
   use SzybkiKalendarzApiWeb, :controller
 
   def index(conn, _params) do
-    render(conn, "index.html")
+		redirect(conn, to: SzybkiKalendarzApiWeb.Router.Helpers.auth_path(conn, :request, :google))
   end
 end
