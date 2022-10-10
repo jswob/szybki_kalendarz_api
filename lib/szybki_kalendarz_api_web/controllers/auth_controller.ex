@@ -6,6 +6,7 @@ defmodule SzybkiKalendarzApiWeb.AuthController do
   use SzybkiKalendarzApiWeb, :controller
 
   plug Ueberauth
+	plug :super_inspect when action in [:request]
 
   alias Ueberauth.Strategy.Helpers
   alias SzybkiKalendarzApi.UserFromAuth
@@ -24,14 +25,14 @@ defmodule SzybkiKalendarzApiWeb.AuthController do
   end
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
-		dbg()
     case UserFromAuth.find_or_create(auth) do
       {:ok, user} ->
         conn
         |> put_flash(:info, "Successfully authenticated.")
         |> put_session(:current_user, user)
         |> configure_session(renew: true)
-        |> redirect(to: "/")
+				|> put_resp_content_type("application/json")
+        |> redirect(external: "http://localhost:3000/landing")
 
       {:error, reason} ->
         conn
@@ -39,4 +40,8 @@ defmodule SzybkiKalendarzApiWeb.AuthController do
         |> redirect(to: "/")
     end
   end
+
+	def super_inspect(conn, _opts) do
+		dbg(conn)
+	end
 end
