@@ -51,7 +51,7 @@ defmodule SzybkiKalendarzApi.MixProject do
       {:plug_cowboy, "~> 2.5"},
 			{:ueberauth, "~> 0.7"},
 			{:ueberauth_google, "~> 0.10.1"},
-			{:oauth2, "~> 2.0", override: true}
+			{:cors_plug, "~> 3.0"},
     ]
   end
 
