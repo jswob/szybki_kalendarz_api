@@ -21,9 +21,28 @@ defmodule SzybkiKalendarzApiWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+		plug :fetch_session
+		plug :authenticate
+		plug CORSPlug, origin: ["http://localhost:3000"]
   end
 
-  scope "/", SzybkiKalendarzApiWeb do
-    get "/", PageController, :index
-  end
+	scope "/api", SzybkiKalendarzApiWeb do
+		pipe_through :api
+
+		get "/session", PageController, :session
+	end
+
+	def authenticate(conn, _opts) do
+		case get_session(conn) do
+			%{"current_session" => current_session} ->
+				conn
+				|> assign(:session, current_session)
+
+			%{} ->
+				conn
+				|> put_status(401)
+				|> put_view(SzybkiKalendarzApiWeb.ErrorView)
+				|> render("401.json")
+		end
+	end
 end

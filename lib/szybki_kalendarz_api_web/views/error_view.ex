@@ -7,6 +7,14 @@ defmodule SzybkiKalendarzApiWeb.ErrorView do
   #   "Internal Server Error"
   # end
 
+	def render("401.json", _assigns) do
+		%{
+			error: %{
+				message: "User has not been authenticated."
+			}
+		}
+	end
+
   # By default, Phoenix returns the status message from
   # the template name. For example, "404.html" becomes
   # "Not Found".

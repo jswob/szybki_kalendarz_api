@@ -28,7 +28,10 @@ defmodule SzybkiKalendarzApiWeb.AuthController do
       {:ok, user} ->
         conn
         |> put_flash(:info, "Successfully authenticated.")
-        |> put_session(:current_user, user)
+        |> put_session(:current_session, %{
+					access_token: auth.credentials.token,
+					current_user: user,
+				})
         |> configure_session(renew: true)
 				|> put_resp_content_type("application/json")
         |> redirect(external: "http://localhost:3000/landing")
@@ -36,6 +39,7 @@ defmodule SzybkiKalendarzApiWeb.AuthController do
       {:error, reason} ->
         conn
         |> put_flash(:error, reason)
+				|> configure_session(renew: true)
         |> redirect(to: "/")
     end
   end

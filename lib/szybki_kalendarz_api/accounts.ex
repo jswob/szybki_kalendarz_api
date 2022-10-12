@@ -10,6 +10,26 @@ defmodule SzybkiKalendarzApi.Accounts do
 	alias Ueberauth.Auth
 	alias Ueberauth.Auth.Info
 
+	@doc """
+  Creates a google_user.
+
+  ## Examples
+
+      iex> create_google_user(%{field: value})
+      {:ok, %GoogleUser{}}
+
+      iex> create_google_user(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def get_google_user_by_email(email) do
+    case Repo.get_by(GoogleUser, email: email) do
+			%GoogleUser{} = google_user -> {:ok, google_user}
+
+			nil -> {:error, :not_found}
+		end
+  end
+
   @doc """
   Creates a google_user.
 
@@ -28,22 +48,11 @@ defmodule SzybkiKalendarzApi.Accounts do
     |> Repo.insert()
   end
 
-	@doc """
-  Returns an `%GoogleUser{}`. It takes %Ueberauth.Auth{} struct and
-	returns matching %GoogleUser{} struct if it exsists and creates a new one
-	otherwise.
-
-  ## Examples
-
-      iex> find_or_create_google_user_from_auth(google_user)
-      {:ok, %GoogleUser{}}
-
-  """
 	def find_or_create_google_user_from_auth(%Auth{info: %Info{email: email, image: avatar_url}}) do
-		case Repo.get_by(GoogleUser, email: email) do
-			%GoogleUser{} = user -> {:ok, user}
+		case get_google_user_by_email(email) do
+			{:ok, user} -> {:ok, user}
 
-			nil ->
+			{:error, :not_found} ->
 				%{email: email, avatar_url: avatar_url}
 				|> create_google_user()
 		end

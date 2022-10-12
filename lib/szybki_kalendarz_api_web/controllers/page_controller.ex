@@ -1,7 +1,8 @@
 defmodule SzybkiKalendarzApiWeb.PageController do
   use SzybkiKalendarzApiWeb, :controller
 
-  def index(conn, _params) do
-		redirect(conn, to: SzybkiKalendarzApiWeb.Router.Helpers.auth_path(conn, :request, :google))
-  end
+	def session(conn, _params) do
+		conn
+		|> render("session.json", user: conn.assigns.session.current_user)
+	end
 end
