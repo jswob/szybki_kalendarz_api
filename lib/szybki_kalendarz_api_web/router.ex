@@ -10,6 +10,10 @@ defmodule SzybkiKalendarzApiWeb.Router do
     plug :put_secure_browser_headers
   end
 
+ 	pipeline :sign_in do
+		plug :clear_session
+	end
+
 	scope "/auth", SzybkiKalendarzApiWeb do
 		pipe_through :browser
 
@@ -19,6 +23,8 @@ defmodule SzybkiKalendarzApiWeb.Router do
     delete "/logout", AuthController, :delete
 
 		scope "/sign-in" do
+			pipe_through :sign_in
+
 			get "/manager", AuthController, :sign_in_manager
 			get "/congregation", AuthController, :sign_in_congregation
 		end
@@ -37,11 +43,17 @@ defmodule SzybkiKalendarzApiWeb.Router do
 		get "/session", PageController, :session
 	end
 
+	def clear_session(conn, _opts) do
+		clear_session(conn)
+	end
+
 	def authenticate(conn, _opts) do
 		case get_session(conn) do
-			%{"current_session" => current_session} ->
+			%{
+				"current_session" => current_session,
+				"account_type" => account_type
+			} ->
 				conn
-				|> assign(:session, current_session)
 
 			%{} ->
 				conn

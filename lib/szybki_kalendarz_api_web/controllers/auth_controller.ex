@@ -26,7 +26,7 @@ defmodule SzybkiKalendarzApiWeb.AuthController do
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
 		%{"account_type" => account_type} = get_session(conn)
 
-    case Accounts.find_or_create_account_from_auth(auth, account_type) do
+    case Accounts.find_or_create_account_from_auth(account_type, auth) do
       {:ok, user} ->
         conn
         |> put_flash(:info, "Successfully authenticated.")
@@ -42,7 +42,7 @@ defmodule SzybkiKalendarzApiWeb.AuthController do
         conn
         |> put_flash(:error, reason)
 				|> configure_session(renew: true)
-        |> redirect(to: "/")
+        |> render(SzybkiKalendarzApiWeb.ErrorView, "error.json", %{message: reason})
     end
   end
 

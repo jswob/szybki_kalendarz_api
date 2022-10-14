@@ -13,6 +13,6 @@ defmodule SzybkiKalendarzApi.Accounts.Manager do
   def changeset(manager, attrs) do
     manager
     |> cast(attrs, [:email, :avatar_url])
-    |> validate_required([:email, :avatar_url])
+    |> validate_required([:email])
   end
 end

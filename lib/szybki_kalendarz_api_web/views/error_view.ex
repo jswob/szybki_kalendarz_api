@@ -15,6 +15,14 @@ defmodule SzybkiKalendarzApiWeb.ErrorView do
 		}
 	end
 
+	def render("error.json", %{message: message}) do
+		%{
+			error: %{
+				message: message
+			}
+		}
+	end
+
   # By default, Phoenix returns the status message from
   # the template name. For example, "404.html" becomes
   # "Not Found".
