@@ -24,7 +24,9 @@ defmodule SzybkiKalendarzApiWeb.AuthController do
   end
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
-    case Accounts.find_or_create_google_user_from_auth(auth) do
+		%{"account_type" => account_type} = get_session(conn)
+
+    case Accounts.find_or_create_account_from_auth(auth, account_type) do
       {:ok, user} ->
         conn
         |> put_flash(:info, "Successfully authenticated.")
@@ -43,4 +45,16 @@ defmodule SzybkiKalendarzApiWeb.AuthController do
         |> redirect(to: "/")
     end
   end
+
+	def sign_in_manager(conn, _params) do
+		conn
+		|> put_session(:account_type, "manager")
+		|> redirect(to: "/auth/google")
+	end
+
+	def sign_in_congregation(conn, _params) do
+		conn
+		|> put_session(:account_type, "congregation")
+		|> redirect(to: "/auth/google")
+	end
 end

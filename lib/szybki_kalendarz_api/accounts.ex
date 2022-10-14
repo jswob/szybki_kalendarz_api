@@ -6,55 +6,57 @@ defmodule SzybkiKalendarzApi.Accounts do
   import Ecto.Query, warn: false
   alias SzybkiKalendarzApi.Repo
 
-  alias SzybkiKalendarzApi.Accounts.GoogleUser
+  alias SzybkiKalendarzApi.Accounts.Manager
 	alias Ueberauth.Auth
 	alias Ueberauth.Auth.Info
 
-	@doc """
-  Creates a google_user.
-
-  ## Examples
-
-      iex> create_google_user(%{field: value})
-      {:ok, %GoogleUser{}}
-
-      iex> create_google_user(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def get_google_user_by_email(email) do
-    case Repo.get_by(GoogleUser, email: email) do
-			%GoogleUser{} = google_user -> {:ok, google_user}
+	def get_manager_by_email(email) do
+    case Repo.get_by(Manager, email: email) do
+			%Manager{} = manager -> {:ok, manager}
 
 			nil -> {:error, :not_found}
 		end
   end
 
-  @doc """
-  Creates a google_user.
-
-  ## Examples
-
-      iex> create_google_user(%{field: value})
-      {:ok, %GoogleUser{}}
-
-      iex> create_google_user(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_google_user(attrs \\ %{}) do
-    %GoogleUser{}
-    |> GoogleUser.changeset(attrs)
+	def create_manager(attrs \\ %{}) do
+    %Manager{}
+    |> Manager.changeset(attrs)
     |> Repo.insert()
   end
 
-	def find_or_create_google_user_from_auth(%Auth{info: %Info{email: email, image: avatar_url}}) do
-		case get_google_user_by_email(email) do
+	# def get_congregation_by_email(email) do
+  #   case Repo.get_by(GoogleUser, email: email) do
+	# 		%GoogleUser{} = google_user -> {:ok, google_user}
+
+	# 		nil -> {:error, :not_found}
+	# 	end
+  # end
+
+
+
+	# def create_congregation(attrs \\ %{}) do
+  #   %GoogleUser{}
+  #   |> GoogleUser.changeset(attrs)
+  #   |> Repo.insert()
+  # end
+
+	def find_or_create_account_from_auth(%Auth{info: %Info{email: email, image: avatar_url}}, "manager") do
+		case get_manager_by_email(email) do
 			{:ok, user} -> {:ok, user}
 
 			{:error, :not_found} ->
 				%{email: email, avatar_url: avatar_url}
-				|> create_google_user()
+				|> create_manager()
 		end
 	end
+
+	# def find_or_create_account_from_auth(%Auth{info: %Info{email: email, image: avatar_url}}, "congregation") do
+	# 	case get_congregation_by_email(email) do
+	# 		{:ok, user} -> {:ok, user}
+
+	# 		{:error, :not_found} ->
+	# 			%{email: email, avatar_url: avatar_url}
+	# 			|> create_congregation()
+	# 	end
+	# end
 end

@@ -17,6 +17,11 @@ defmodule SzybkiKalendarzApiWeb.Router do
     get "/:provider/callback", AuthController, :callback
     post "/:provider/callback", AuthController, :callback
     delete "/logout", AuthController, :delete
+
+		scope "/sign-in" do
+			get "/manager", AuthController, :sign_in_manager
+			get "/congregation", AuthController, :sign_in_congregation
+		end
 	end
 
   pipeline :api do
