@@ -38,11 +38,17 @@ defmodule SzybkiKalendarzApiWeb.AuthController do
 				|> put_resp_content_type("application/json")
         |> redirect(external: "http://localhost:3000/landing")
 
-      {:error, reason} ->
+      {:error, :wrong_account_type} ->
         conn
-        |> put_flash(:error, reason)
+        |> put_flash(:error, :wrong_account_type)
 				|> configure_session(renew: true)
-        |> render(SzybkiKalendarzApiWeb.ErrorView, "error.json", %{message: reason})
+				|> redirect(external: "http://localhost:3000/landing/error/wrong-account-type")
+
+			{:error, reason} ->
+				conn
+				|> put_flash(:error, reason)
+				|> configure_session(renew: true)
+				|> render(SzybkiKalendarzApiWeb.ErrorView, "error.json", %{message: reason})
     end
   end
 
