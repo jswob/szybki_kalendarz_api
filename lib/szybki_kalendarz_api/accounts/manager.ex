@@ -1,10 +1,10 @@
 defmodule SzybkiKalendarzApi.Accounts.Manager do
   use Ecto.Schema
   import Ecto.Changeset
+	alias SzybkiKalendarzApi.Accounts.GoogleUser
 
   schema "managers" do
-    field :avatar_url, :string
-    field :email, :string
+		belongs_to :owner, GoogleUser
 
     timestamps()
   end
@@ -12,7 +12,17 @@ defmodule SzybkiKalendarzApi.Accounts.Manager do
   @doc false
   def changeset(manager, attrs) do
     manager
-    |> cast(attrs, [:email, :avatar_url])
-    |> validate_required([:email])
+    |> cast(attrs, [])
+		|> cast_owner(attrs)
   end
+
+	def cast_owner(manager, %{owner: %GoogleUser{} = owner}) do
+		case owner do
+			nil ->
+				throw "manager: owner can't be nil."
+
+			id ->
+				put_assoc(manager, :owner, owner)
+		end
+	end
 end
