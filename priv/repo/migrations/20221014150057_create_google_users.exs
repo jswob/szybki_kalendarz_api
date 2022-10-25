@@ -6,8 +6,6 @@ defmodule SzybkiKalendarzApi.Repo.Migrations.CreateGoogleUsers do
       add :email, :text
       add :avatar_url, :text
 			add :type, :string
-
-      timestamps()
     end
 
 		create unique_index(:google_users, [:email])
@@ -15,11 +13,15 @@ defmodule SzybkiKalendarzApi.Repo.Migrations.CreateGoogleUsers do
 
 		create table(:managers) do
 			add :owner_id, references(:google_users)
+
+			timestamps()
 		end
 
 		create table(:congregations) do
 			add :name, :text
 			add :owner_id, references(:google_users)
+
+			timestamps()
 		end
 
 		create unique_index(:managers, [:owner_id])
