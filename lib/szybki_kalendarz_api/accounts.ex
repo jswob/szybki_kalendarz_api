@@ -65,8 +65,6 @@ defmodule SzybkiKalendarzApi.Accounts do
 	end
 
 	defp check_account_type(%GoogleUser{type: account_type} = account, type) do
-
-		dbg(account_type)
 		cond do
 			String.to_atom(type) == account_type ->
 				{:ok, account}

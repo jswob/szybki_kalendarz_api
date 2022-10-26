@@ -6,7 +6,7 @@ defmodule SzybkiKalendarzApiWeb.Router do
     plug :fetch_session
     plug :fetch_flash
     plug :protect_from_forgery
-		plug CORSPlug
+		plug CORSPlug, origin: ["http://localhost:3000"]
     plug :put_secure_browser_headers
   end
 

@@ -9,13 +9,14 @@ defmodule SzybkiKalendarzApiWeb.AuthController do
 
   alias Ueberauth.Strategy.Helpers
 	alias SzybkiKalendarzApi.Accounts
+	alias SzybkiKalendarzApiWeb.AuthView
 
-  def delete(conn, _params) do
-    conn
+	def request(conn, %{"provider" => "logout"}) do
+		conn
     |> put_flash(:info, "You have been logged out!")
     |> clear_session()
-    |> redirect(to: "/")
-  end
+    |> render(AuthView, "logout.json")
+	end
 
   def callback(%{assigns: %{ueberauth_failure: _fails}} = conn, _params) do
     conn
