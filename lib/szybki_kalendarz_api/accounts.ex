@@ -30,7 +30,7 @@ defmodule SzybkiKalendarzApi.Accounts do
 				:congregation -> create_congregation_from_google_user(owner_data)
 			end
 
-		{:ok, google_user}
+		google_user
 	end
 
 	def create_manager_from_google_user(%GoogleUser{} = owner) do

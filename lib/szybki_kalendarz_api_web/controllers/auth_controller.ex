@@ -35,7 +35,7 @@ defmodule SzybkiKalendarzApiWeb.AuthController do
 					access_token: auth.credentials.token,
 					current_user: user,
 				})
-        |> configure_session(renew: true)
+				|> configure_session(renew: true)
 				|> put_resp_content_type("application/json")
         |> redirect(external: "http://localhost:3000/landing")
 
