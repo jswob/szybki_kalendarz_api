@@ -12,6 +12,11 @@ defmodule SzybkiKalendarzApi.Accounts do
 	alias Ueberauth.Auth
 	alias Ueberauth.Auth.Info
 
+	def get_google_user_by_id(id) do
+		from(gu in GoogleUser, where: gu.id == ^id)
+		|> Repo.one()
+	end
+
 	def get_google_user_by_email(email) do
 		case Repo.all(
 			from gu in GoogleUser,

@@ -50,12 +50,13 @@ defmodule SzybkiKalendarzApiWeb.Router do
 	def authenticate(conn, _opts) do
 		case get_session(conn) do
 			%{
-				"current_session" => current_session,
-				"account_type" => account_type
+				"access_token" => _,
+				"current_user_id" => _,
+				"account_type" => _
 			} ->
 				conn
 
-			%{} ->
+			_ ->
 				conn
 				|> put_status(401)
 				|> put_view(SzybkiKalendarzApiWeb.ErrorView)

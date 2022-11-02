@@ -9,6 +9,7 @@ defmodule SzybkiKalendarzApiWeb.AuthController do
 
   alias Ueberauth.Strategy.Helpers
 	alias SzybkiKalendarzApi.Accounts
+	alias SzybkiKalendarzApi.Accounts.GoogleUser
 	alias SzybkiKalendarzApiWeb.AuthView
 
 	def request(conn, %{"provider" => "logout"}) do
@@ -28,13 +29,10 @@ defmodule SzybkiKalendarzApiWeb.AuthController do
 		%{"account_type" => account_type} = get_session(conn)
 
     case Accounts.find_or_create_account_from_auth(account_type, auth) do
-      {:ok, user} ->
+      {:ok, %GoogleUser{id: user_id}} ->
         conn
-        |> put_flash(:info, "Successfully authenticated.")
-        |> put_session(:current_session, %{
-					access_token: auth.credentials.token,
-					current_user: user,
-				})
+				|> put_session(:access_token, auth.credentials.token)
+				|> put_session(:current_user_id, user_id)
 				|> configure_session(renew: true)
 				|> put_resp_content_type("application/json")
         |> redirect(external: "http://localhost:3000/landing")
