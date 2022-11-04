@@ -50,7 +50,6 @@ defmodule SzybkiKalendarzApiWeb.Router do
 	def authenticate(conn, _opts) do
 		case get_session(conn) do
 			%{
-				"access_token" => _,
 				"current_user_id" => _,
 				"account_type" => _
 			} ->

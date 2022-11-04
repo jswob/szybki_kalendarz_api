@@ -31,7 +31,6 @@ defmodule SzybkiKalendarzApiWeb.AuthController do
     case Accounts.find_or_create_account_from_auth(account_type, auth) do
       {:ok, %GoogleUser{id: user_id}} ->
         conn
-				|> put_session(:access_token, auth.credentials.token)
 				|> put_session(:current_user_id, user_id)
 				|> configure_session(renew: true)
 				|> put_resp_content_type("application/json")
