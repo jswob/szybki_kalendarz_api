@@ -11,7 +11,7 @@ defmodule SzybkiKalendarzApi.Repo.Migrations.CreateGoogleTokens do
     end
 
     alter table(:google_users) do
-      add :token_id, references(:google_tokens)
+      add :token_id, references(:google_tokens), null: false
     end
 
     create unique_index(:google_users, [:token_id])
