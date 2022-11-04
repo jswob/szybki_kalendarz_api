@@ -2,7 +2,8 @@ defmodule SzybkiKalendarzApi.Repo.Migrations.CreateGoogleUsers do
   use Ecto.Migration
 
   def change do
-    create table(:google_users) do
+    create table(:google_users, primary_key: false) do
+			add :id, :uuid, primary_key: true
       add :email, :text
       add :avatar_url, :text
 			add :type, :string
@@ -11,15 +12,17 @@ defmodule SzybkiKalendarzApi.Repo.Migrations.CreateGoogleUsers do
 		create unique_index(:google_users, [:email])
 		create constraint(:google_users, :user_type, check: "type = 'manager' or type = 'congregation'")
 
-		create table(:managers) do
-			add :owner_id, references(:google_users)
+		create table(:managers, primary_key: false) do
+			add :id, :uuid, primary_key: true
+			add :owner_id, references(:google_users, type: :uuid)
 
 			timestamps()
 		end
 
-		create table(:congregations) do
+		create table(:congregations, primary_key: false) do
+			add :id, :uuid, primary_key: true
 			add :name, :text
-			add :owner_id, references(:google_users)
+			add :owner_id, references(:google_users, type: :uuid)
 
 			timestamps()
 		end
@@ -32,7 +35,7 @@ defmodule SzybkiKalendarzApi.Repo.Migrations.CreateGoogleUsers do
 
 	defp execute_up do
 		repo().query!("
-			CREATE FUNCTION check_google_user_type(user_id BIGINT, expected_type VARCHAR)
+			CREATE FUNCTION check_google_user_type(user_id UUID, expected_type VARCHAR)
 			RETURNS VOID LANGUAGE plpgsql
 			AS $$
 				DECLARE
@@ -97,6 +100,6 @@ defmodule SzybkiKalendarzApi.Repo.Migrations.CreateGoogleUsers do
 		repo().query!("DROP TRIGGER check_if_congregation_has_correct_google_user ON congregations;");
 		repo().query!("DROP FUNCTION check_if_google_user_is_manager;");
 		repo().query!("DROP FUNCTION check_if_google_user_is_congregation;");
-		repo().query!("DROP FUNCTION check_google_user_type(BIGINT, VARCHAR);");
+		repo().query!("DROP FUNCTION check_google_user_type(UUID, VARCHAR);");
 	end
 end

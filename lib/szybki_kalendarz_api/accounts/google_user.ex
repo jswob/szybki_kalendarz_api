@@ -4,12 +4,14 @@ defmodule SzybkiKalendarzApi.Accounts.GoogleUser do
 
   alias SzybkiKalendarzApi.Tokens.GoogleToken
 
+	@primary_key {:id, :binary_id, autogenerate: true}
+
   schema "google_users" do
     field :avatar_url, :string
     field :email, :string
     field :type, Ecto.Enum, values: [manager: "manager", congregation: "congregation"]
 
-    belongs_to :token, GoogleToken
+    belongs_to :token, GoogleToken, type: :binary_id
   end
 
   @doc false

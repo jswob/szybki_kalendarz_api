@@ -42,7 +42,6 @@ defmodule SzybkiKalendarzApi.Accounts do
   def create_manager_from_google_user(%GoogleUser{} = owner) do
     %Manager{}
     |> Manager.changeset(%{owner: owner})
-    |> dbg()
     |> Repo.insert()
   end
 
@@ -56,13 +55,7 @@ defmodule SzybkiKalendarzApi.Accounts do
     %GoogleUser{}
     |> GoogleUser.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:token, token)
-    |> dbg()
     |> Repo.insert()
-  end
-
-  def create_google_user(attr1, attr2) do
-    dbg(attr1)
-    dbg(attr2)
   end
 
   def find_or_create_account_from_auth(type, %Auth{info: user_data, credentials: token_data}) do
@@ -78,7 +71,6 @@ defmodule SzybkiKalendarzApi.Accounts do
             avatar_url: user_data.image,
             type: type
           })
-          |> dbg()
           |> create_account_from_google_user()
         end)
     end

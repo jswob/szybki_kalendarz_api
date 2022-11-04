@@ -3,8 +3,10 @@ defmodule SzybkiKalendarzApi.Accounts.Manager do
   import Ecto.Changeset
   alias SzybkiKalendarzApi.Accounts.GoogleUser
 
+	@primary_key {:id, :binary_id, autogenerate: true}
+
   schema "managers" do
-    belongs_to :owner, GoogleUser
+    belongs_to :owner, GoogleUser, type: :binary_id
 
     timestamps()
   end

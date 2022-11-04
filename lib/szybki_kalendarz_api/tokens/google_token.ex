@@ -2,6 +2,8 @@ defmodule SzybkiKalendarzApi.Tokens.GoogleToken do
   use Ecto.Schema
   import Ecto.Changeset
 
+	@primary_key {:id, :binary_id, autogenerate: true}
+
   schema "google_tokens" do
     field :expires_at, :date
     field :refresh_token, :string

@@ -3,9 +3,11 @@ defmodule SzybkiKalendarzApi.Accounts.Congregation do
   import Ecto.Changeset
 	alias SzybkiKalendarzApi.Accounts.GoogleUser
 
+	@primary_key {:id, :binary_id, autogenerate: true}
+
   schema "congregations" do
     field :name, :string
-		belongs_to :owner, GoogleUser
+		belongs_to :owner, GoogleUser, type: :binary_id
 
     timestamps()
   end
