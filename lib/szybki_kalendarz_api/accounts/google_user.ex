@@ -3,6 +3,7 @@ defmodule SzybkiKalendarzApi.Accounts.GoogleUser do
   import Ecto.Changeset
 
   alias SzybkiKalendarzApi.Tokens.GoogleToken
+	alias SzybkiKalendarzApi.Accounts.{Manager,Congregation}
 
 	@primary_key {:id, :binary_id, autogenerate: true}
 
@@ -12,19 +13,15 @@ defmodule SzybkiKalendarzApi.Accounts.GoogleUser do
     field :type, Ecto.Enum, values: [manager: "manager", congregation: "congregation"]
 
     belongs_to :token, GoogleToken, type: :binary_id
+
+		has_one :manager, Manager, foreign_key: :owner_id
+		has_one :congregation, Congreagation, foreign_key: :owner_id
   end
 
   @doc false
   def changeset(google_user, attrs) do
     google_user
     |> cast(attrs, [:email, :type, :avatar_url])
-    # |> cast_token(attrs)
     |> validate_required([:email, :type])
   end
-
-  # defp cast_token(user, %{token: %GoogleToken{} = token}),
-  #   do: put_assoc(user, :token, token)
-
-  # defp cast_token(_, _),
-  #   do: throw("Missing required parameter \"access_token\" on google_user changeset")
 end
