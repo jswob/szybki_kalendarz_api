@@ -34,6 +34,7 @@ defmodule SzybkiKalendarzApiWeb.Router do
     plug :accepts, ["json"]
 		plug :fetch_session
 		plug :authenticate
+		plug SzybkiKalendarzApiWeb.Context
 		plug CORSPlug, origin: ["http://localhost:3000"]
   end
 
@@ -41,6 +42,12 @@ defmodule SzybkiKalendarzApiWeb.Router do
 		pipe_through :api
 
 		get "/session", PageController, :session
+	end
+
+	scope "/graphql" do
+		pipe_through [:api]
+
+		post "/", Absinthe.Plug, schema: SzybkiKalendarzApiWeb.Schema
 	end
 
 	def clear_session(conn, _opts) do

@@ -52,6 +52,9 @@ defmodule SzybkiKalendarzApi.MixProject do
 			{:ueberauth, "~> 0.7"},
 			{:ueberauth_google, "~> 0.10.1"},
 			{:cors_plug, "~> 3.0"},
+			{:absinthe, "~> 1.5"},
+			{:absinthe_phoenix, "~> 2.0"},
+			{:absinthe_plug, "~> 1.5"},
     ]
   end
 
