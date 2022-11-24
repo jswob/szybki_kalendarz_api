@@ -15,7 +15,7 @@ defmodule SzybkiKalendarzApi.Accounts.GoogleUser do
     belongs_to :token, GoogleToken, type: :binary_id
 
 		has_one :manager, Manager, foreign_key: :owner_id
-		has_one :congregation, Congreagation, foreign_key: :owner_id
+		has_one :congregation, Congregation, foreign_key: :owner_id
   end
 
   @doc false
